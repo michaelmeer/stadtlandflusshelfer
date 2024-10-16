@@ -10,6 +10,9 @@ packages = [
   {include = "stadtlandflusshelfer"}
 ]
 
+[tool.poetry.scripts]
+stadtlandflusshelfer = 'stadtlandflusshelfer.__main__:main'
+
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
 textual = "^0.83.0"

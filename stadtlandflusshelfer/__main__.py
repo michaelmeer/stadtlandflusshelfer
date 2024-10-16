@@ -59,7 +59,6 @@ class MyApp(App):
     """
 
     TITLE = "StadtLandFluss Helfer"
-    SUB_TITLE = "Michael Meer"
 
     INITIAL_LETTER = "-"
 
@@ -67,7 +66,6 @@ class MyApp(App):
     unpicked_letters = reactive(list(string.ascii_uppercase))
 
     BINDINGS = [  # noqa: RUF012§
-        ("q", "request_quit", "Quit"),
         ("r", "request_reset_letters", "Reset Letters"),
     ]
 
