@@ -25,7 +25,7 @@ class SelectedLettersWidget(Static):
         renderable_result += " "
         self.update(renderable_result)
 
-    def on_mount(self):
+    def on_mount(self) -> None:
         self.set_selected_letters()
 
 
@@ -35,12 +35,12 @@ class SingleLetterWidget(Static):
     FONT = "roman"
     figlet = pyfiglet.Figlet(font=FONT, justify="center", width=WIDTH)
 
-    def set_selected_letter(self, selected_letter: str = ""):
+    def set_selected_letter(self, selected_letter: str = "") -> None:
         fancy_string = "\n" + self.figlet.renderText(selected_letter)
         self.log(f"@@@@ {selected_letter}:{len(fancy_string.splitlines())}")
         self.update(fancy_string)
 
-    def on_mount(self):
+    def on_mount(self) -> None:
         self.set_selected_letter()
 
     def get_content_width(self, container: Size, viewport: Size) -> int:
@@ -66,7 +66,7 @@ class MyApp(App):
     picked_letter = reactive(INITIAL_LETTER)
     unpicked_letters = reactive(list(string.ascii_uppercase))
 
-    BINDINGS = [  # noqa: RUF012
+    BINDINGS = [  # noqa: RUF012§
         ("q", "request_quit", "Quit"),
         ("r", "request_reset_letters", "Reset Letters"),
     ]
@@ -107,9 +107,8 @@ class MyApp(App):
         yield SingleLetterWidget(id="picked_letter_widget")
         yield SelectedLettersWidget(id="unpicked_letters_widget")
         yield Footer()
-        self.log("DONE WITH COMPOSING")
 
-    def on_mount(self):
+    def on_mount(self) -> None:
         self.query_one("#picked_letter_widget").border_title = "Current Letter"
         self.query_one("#unpicked_letters_widget").border_title = "Unpicked Letters"
 
@@ -121,11 +120,11 @@ class MyApp(App):
             self.unpicked_letters.remove(self.picked_letter)
             self.mutate_reactive(MyApp.unpicked_letters)
 
-    def watch_picked_letter(self):
-        self.query_one("#picked_letter_widget").set_selected_letter(self.picked_letter)
+    def watch_picked_letter(self) -> None:
+        self.query_one("#picked_letter_widget", SingleLetterWidget).set_selected_letter(self.picked_letter)
 
-    def watch_unpicked_letters(self):
-        self.query_one("#unpicked_letters_widget").set_selected_letters(self.unpicked_letters)
+    def watch_unpicked_letters(self) -> None:
+        self.query_one("#unpicked_letters_widget", SelectedLettersWidget).set_selected_letters(self.unpicked_letters)
         select_next_letter_button = self.query_one("#select_next_letter_button")
 
         done_with_all_letters = len(self.unpicked_letters) == 0
@@ -135,13 +134,13 @@ class MyApp(App):
             select_next_letter_button.focus()
             self.notify("Done with all letters! Please reset...", timeout=10)
 
-    def action_request_reset_letters(self):
+    def action_request_reset_letters(self) -> None:
         self.picked_letter = self.INITIAL_LETTER
         self.unpicked_letters = list(string.ascii_uppercase)
         self.mutate_reactive(MyApp.unpicked_letters)
 
 
-def main():
+def main() -> None:
     app = MyApp()
     app.run()
 
