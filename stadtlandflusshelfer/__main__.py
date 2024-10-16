@@ -2,7 +2,7 @@ import random
 import string
 from typing import ClassVar
 
-import pyfiglet
+import pyfiglet # type: ignore
 from textual.app import App, ComposeResult
 from textual.geometry import Size
 from textual.reactive import reactive
@@ -67,7 +67,7 @@ class MyApp(App):
     picked_letter = reactive(INITIAL_LETTER)
     unpicked_letters = reactive(list(string.ascii_uppercase))
 
-    BINDINGS: ClassVar[list[tuple[str, str, str]]] = [
+    BINDINGS = [
         ("q", "request_quit", "Quit"),
         ("r", "request_reset_letters", "Reset Letters"),
     ]
