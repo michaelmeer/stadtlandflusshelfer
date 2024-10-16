@@ -1,4 +1,3 @@
-from textual.app import App, ComposeResult
 import random
 import string
 from typing import ClassVar
@@ -7,7 +6,7 @@ import pyfiglet
 from textual.app import App, ComposeResult
 from textual.geometry import Size
 from textual.reactive import reactive
-from textual.widgets import Footer, Header, Button, Static
+from textual.widgets import Button, Footer, Header, Static
 
 
 class SelectedLettersWidget(Static):
@@ -42,13 +41,13 @@ class SingleLetterWidget(Static):
         self.log(f"@@@@ {selected_letter}:{len(fancy_string.splitlines())}")
         self.update(fancy_string)
 
-
     def on_mount(self):
         self.set_selected_letter()
 
     def get_content_width(self, container: Size, viewport: Size) -> int:
         """Force content width size."""
         return self.WIDTH
+
 
 class MyApp(App):
     """
@@ -59,6 +58,7 @@ class MyApp(App):
     - Binding to reset everything
 
     """
+
     TITLE = "StadtLandFluss Helfer"
     SUB_TITLE = "Michael Meer"
 
@@ -75,7 +75,7 @@ class MyApp(App):
     CSS = """
     Screen {
          layout: vertical;
-         align: center middle;         
+         align: center middle;
     }
 
     #select_next_letter_button {
@@ -83,7 +83,7 @@ class MyApp(App):
         padding: 1 2;
         margin: 1 0;
         text-align: center;
-        border: heavy $panel;     
+        border: heavy $panel;
     }
 
     SingleLetterWidget {
@@ -92,7 +92,7 @@ class MyApp(App):
         width: auto;
         align: center middle;
     }
-    
+
     SelectedLettersWidget {
         border: double $accent;
         height: auto;
@@ -112,13 +112,13 @@ class MyApp(App):
 
     def on_mount(self):
         self.query_one("#picked_letter_widget").border_title = "Current Letter"
-        self.query_one("#unpicked_letters_widget").border_title ="Unpicked Letters"
+        self.query_one("#unpicked_letters_widget").border_title = "Unpicked Letters"
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
         self.log(">>> on_button_pressed <<<")
         button_id = event.button.id
         if button_id == "select_next_letter_button":
-            self.picked_letter = random.choice(self.unpicked_letters) # noqa: S311
+            self.picked_letter = random.choice(self.unpicked_letters)  # noqa: S311
             self.unpicked_letters.remove(self.picked_letter)
             self.mutate_reactive(MyApp.unpicked_letters)
 
@@ -129,22 +129,23 @@ class MyApp(App):
         self.query_one("#unpicked_letters_widget").set_selected_letters(self.unpicked_letters)
         select_next_letter_button = self.query_one("#select_next_letter_button")
 
-        done_with_all_letters = len(self.unpicked_letters)==0
+        done_with_all_letters = len(self.unpicked_letters) == 0
         select_next_letter_button.disabled = done_with_all_letters
 
         if done_with_all_letters:
             select_next_letter_button.focus()
             self.notify("Done with all letters! Please reset...", timeout=10)
 
-
     def action_request_reset_letters(self):
         self.picked_letter = self.INITIAL_LETTER
         self.unpicked_letters = list(string.ascii_uppercase)
         self.mutate_reactive(MyApp.unpicked_letters)
 
+
 def main():
     app = MyApp()
     app.run()
+
 
 if __name__ == "__main__":  # pragma: no cover
     main()
