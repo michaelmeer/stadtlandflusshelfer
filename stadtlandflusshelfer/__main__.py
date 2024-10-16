@@ -13,7 +13,7 @@ from textual.widgets import Footer, Header, Button, Static
 class SelectedLettersWidget(Static):
     all_letters = string.ascii_uppercase
 
-    def set_selected_letters(self, selected_letters: list[str] = None) -> None:
+    def set_selected_letters(self, selected_letters: list[str] | None = None) -> None:
         renderable_result = " "
         if selected_letters is None:
             selected_letters = []
@@ -65,7 +65,7 @@ class MyApp(App):
     INITIAL_LETTER = "-"
 
     picked_letter = reactive(INITIAL_LETTER)
-    unpicked_letters = reactive([entry for entry in string.ascii_uppercase])
+    unpicked_letters = reactive(list(string.ascii_uppercase))
 
     BINDINGS: ClassVar[list[tuple[str, str, str]]] = [
         ("q", "request_quit", "Quit"),
@@ -102,11 +102,6 @@ class MyApp(App):
     }
     """
 
-    def action_request_reset_letters(self):
-        self.picked_letter = self.INITIAL_LETTER
-        self.unpicked_letters = [entry for entry in string.ascii_uppercase]
-        self.mutate_reactive(MyApp.unpicked_letters)
-
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
         yield Button.success("Select next letter", id="select_next_letter_button")
@@ -123,7 +118,7 @@ class MyApp(App):
         self.log(">>> on_button_pressed <<<")
         button_id = event.button.id
         if button_id == "select_next_letter_button":
-            self.picked_letter = random.choice(self.unpicked_letters)
+            self.picked_letter = random.choice(self.unpicked_letters) # noqa: S311
             self.unpicked_letters.remove(self.picked_letter)
             self.mutate_reactive(MyApp.unpicked_letters)
 
@@ -140,6 +135,12 @@ class MyApp(App):
         if done_with_all_letters:
             select_next_letter_button.focus()
             self.notify("Done with all letters! Please reset...", timeout=10)
+
+
+    def action_request_reset_letters(self):
+        self.picked_letter = self.INITIAL_LETTER
+        self.unpicked_letters = list(string.ascii_uppercase)
+        self.mutate_reactive(MyApp.unpicked_letters)
 
 def main():
     app = MyApp()
