@@ -66,7 +66,7 @@ class MyApp(App):
     picked_letter = reactive(INITIAL_LETTER)
     unpicked_letters = reactive(list(string.ascii_uppercase))
 
-    BINDINGS = [ # noqa: RUF012
+    BINDINGS = [  # noqa: RUF012
         ("q", "request_quit", "Quit"),
         ("r", "request_reset_letters", "Reset Letters"),
     ]
