@@ -8,8 +8,8 @@ Created to teach myself the [Textual library](https://textual.textualize.io/).
 
 To start, run CLI command "stadtlandflusshelfer" in the packages venv.
 
-![Screenshot](resources/Screenshot.png)
-t
+![Screenshot](resources/screenshot.png)
+
 - **Github repository**: <https://github.com/michaelmeer/stadtlandflusshelfer/>
 - **Documentation** <https://michaelmeer.github.io/stadtlandflusshelfer/>
 
